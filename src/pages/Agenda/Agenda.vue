@@ -8,7 +8,7 @@
             <h5 class="q-ma-none"><q-icon name="mdi-circle" :color="props.eventDialogData.color"></q-icon> {{ props.eventDialogData.title }}</h5>
             <div>
               <q-btn icon="mdi-pencil" flat dense @click="editProduct(props.eventDialogData)"/>
-              <q-btn icon="mdi-delete" flat dense/>
+              <q-btn icon="mdi-delete" flat dense @click="deleteAgendamento(props.eventDialogData)"/>
             </div>
             <div class="row">
               <div class="q-ma-none text-subtitle1">{{ formatDate(props.eventDialogData.time.start) }}</div>
@@ -41,7 +41,8 @@ import { Qalendar } from 'qalendar';
 import 'qalendar/dist/style.css';
 import { meses } from '../../helper/constants'
 import ModalCadastroAgendamento from './ModalCadastroAgendamento.vue';
-import { ListAgendamento } from 'src/services/AppointmenteService';
+import { ListAgendamento, DeleteAgendamento } from 'src/services/AppointmenteService';
+import { notificarSucesso } from '../../helper/notification';
 
 export default {
   components: {
@@ -101,6 +102,27 @@ export default {
         };
       });
       console.log(this.events);
+    },
+    deleteAgendamento (agendamento) {
+      this.$q.dialog({
+        title: 'Cuidado!',
+        message: `Essa ação ira deletar o agendamento ${agendamento.title}. Deseja continuar?`,
+        cancel: {
+          label: 'Não',
+          color: 'primary',
+          push: true
+        },
+        ok: {
+          label: 'Sim',
+          color: 'negative',
+          push: true
+        },
+        persistent: true
+      }).onOk(async () => {
+        await DeleteAgendamento(agendamento.id)
+        await this.listAgendamento()
+        notificarSucesso('Agendamento deletado!')
+      })
     },
     editProduct (agendamento) {
       this.agendamentoSelecionado = agendamento

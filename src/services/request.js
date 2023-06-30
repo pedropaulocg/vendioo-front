@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Notify } from 'quasar'
+import { Logout } from 'src/router'
 
 const service = () => {
   const tokenAuth = JSON.parse(localStorage.getItem('token'))
@@ -24,7 +25,7 @@ const service = () => {
           message: error.response.data.message
         })
       }
-
+      if (error.response.status === 403) Logout(403)
       return Promise.reject(error)
     }
   )
@@ -47,6 +48,7 @@ export async function request({ url, method, params, data }) {
     const response = await request.request(requestConfig)
     responseData = response
   } catch (error) {
+    console.log(error)
     return Promise.reject(error)
   }
   return responseData

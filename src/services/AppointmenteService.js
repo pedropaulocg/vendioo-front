@@ -18,17 +18,17 @@ export function ListAgendamento (params) {
   })
 }
 
-// export function UpdateProduct (data, productId) {
-//   return request({
-//     url: `${url}/${productId}`,
-//     method: 'put',
-//     data
-//   })
-// }
+export function UpdateAgendamento (data, appointmentId) {
+  return request({
+    url: `${url}/${appointmentId}`,
+    method: 'put',
+    data
+  })
+}
 
-// export function DeleteProduct (productId) {
-//   return request({
-//     url: `${url}/${productId}`,
-//     method: 'delete'
-//   })
-// }
+export function DeleteAgendamento (appointmentId) {
+  return request({
+    url: `${url}/${appointmentId}`,
+    method: 'delete'
+  })
+}

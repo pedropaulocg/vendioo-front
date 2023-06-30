@@ -87,7 +87,7 @@
 import { required } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core';
 import { notificarErro, notificarSucesso } from '../../helper/notification';
-import { CreateAgendamento } from '../../services/AppointmenteService'
+import { CreateAgendamento, UpdateAgendamento } from '../../services/AppointmenteService'
 
 export default {
   props: {
@@ -143,7 +143,8 @@ export default {
       this.agendamento.start = `${ano}-${mes}-${dia} ${this.startTime}`
       this.agendamento.end = `${ano}-${mes}-${dia} ${this.endTime}`
       if (this.isUpdate) {
-        console.log
+        await UpdateAgendamento(this.agendamento, this.agendamentoSelecionado.id)
+        notificarSucesso('Agendamento atualizado!')
       } else {
         await CreateAgendamento(this.agendamento);
         notificarSucesso('Agendamento marcado!')

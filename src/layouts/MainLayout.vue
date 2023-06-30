@@ -28,9 +28,6 @@
             size="25px"
             rounded
             class="q-ml-lg">
-            <q-tooltip>
-              Online
-            </q-tooltip>
           </q-avatar>
           <q-btn flat
             no-caps
@@ -39,8 +36,8 @@
             class="bg-padrao btn-rounded text-bold q-mx-sm q-ml-lg">
             <q-icon name="mdi-account"></q-icon>
             <q-menu>
-              <q-list style="min-width: 100px">
-                <q-item-label header> Olá!</q-item-label>
+              <q-list style="min-width: 150px">
+                <q-item-label header> Olá, {{ userName }}!</q-item-label>
                 <q-item clickable
                   v-close-popup
                   @click="abrirModalUsuario">
@@ -48,7 +45,7 @@
                 </q-item>
                 <q-item clickable
                   v-close-popup
-                  @click="efetuarLogout">
+                  @click="realizarLogout">
                   <q-item-section>Sair</q-item-section>
                 </q-item>
                 <q-separator />
@@ -91,6 +88,8 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'src/components/EssentialLink.vue'
+import { notificarSucesso } from '../helper/notification'
+import router from 'src/router'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -100,6 +99,12 @@ export default defineComponent({
   },
 
   setup () {
+    const realizarLogout = () => {
+      // localStorage.clear()
+      router.push('/login')
+      notificarSucesso('Finalizando sessão')
+    }
+    const userName = JSON.parse(localStorage.getItem('username'))
     return {
       drawer: ref(false),
       miniState: ref(true),
@@ -108,7 +113,9 @@ export default defineComponent({
         { title: 'Dashboard', icon: 'mdi-monitor-dashboard', routeName: '' },
         { title: 'Produtos', icon: 'mdi-package-variant-closed', routeName: 'produtos' },
         { title: 'Agenda', icon: 'mdi-notebook', routeName: 'agenda' }
-      ]
+      ],
+      realizarLogout,
+      userName
     }
   }
 })
